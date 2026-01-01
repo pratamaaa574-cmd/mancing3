@@ -1,11 +1,13 @@
--- BENJAMIN GUI FIX | ROBLOX DELTA READY
--- LocalScript version
+--====================================================
+-- BENJAMIN GUI | ROBLOX DELTA READY
+-- Minimalis, Dragable, Minimize, Close
+--====================================================
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local plr = Players.LocalPlayer
 
--- Bersihin GUI lama
+-- Bersihkan GUI lama
 if plr.PlayerGui:FindFirstChild("BENJAMIN_GUI") then
     plr.PlayerGui.BENJAMIN_GUI:Destroy()
 end
@@ -24,8 +26,8 @@ main.Position = UDim2.new(0.5,-110,0.5,-30)
 main.BackgroundColor3 = Color3.fromRGB(20,20,20)
 main.BorderSizePixel = 3
 main.BorderColor3 = Color3.fromRGB(255,105,180)
-main.Visible = true
 Instance.new("UICorner", main).CornerRadius = UDim.new(0,10)
+main.Visible = true
 main.Parent = gui
 
 -- Title
@@ -34,7 +36,6 @@ title.Size = UDim2.new(1,0,1,0)
 title.Text = "BENJAMIN"
 title.TextColor3 = Color3.new(1,1,1)
 title.Font = Enum.Font.GothamBold
-title.TextSize = 16
 title.TextScaled = true
 title.BackgroundTransparency = 1
 title.TextXAlignment = Enum.TextXAlignment.Center
@@ -63,24 +64,20 @@ miniBtn.Font = Enum.Font.GothamBold
 miniBtn.TextSize = 18
 
 -- Mini icon
-local mini = Instance.new("Frame")
+local mini = Instance.new("TextButton")
 mini.Size = UDim2.new(0,70,0,70)
 mini.Position = UDim2.new(0.5,-35,0.8,0)
 mini.BackgroundColor3 = Color3.fromRGB(0,120,255)
+mini.Text = "B"
+mini.TextColor3 = Color3.new(1,1,1)
+mini.Font = Enum.Font.GothamBold
+mini.TextSize = 32
 mini.Visible = false
 mini.BorderSizePixel = 0
 Instance.new("UICorner", mini).CornerRadius = UDim.new(1,0)
 mini.Parent = gui
 
-local miniText = Instance.new("TextLabel", mini)
-miniText.Size = UDim2.new(1,0,1,0)
-miniText.Text = "B"
-miniText.TextColor3 = Color3.new(1,1,1)
-miniText.Font = Enum.Font.GothamBold
-miniText.TextSize = 32
-miniText.BackgroundTransparency = 1
-
--- Drag function (works only when clicking outside buttons)
+-- Drag function
 local function dragify(frame)
     local dragging, dragStart, startPos
     frame.InputBegan:Connect(function(input)
@@ -107,19 +104,19 @@ end
 dragify(main)
 dragify(mini)
 
--- Minimize
+-- Minimize logic
 miniBtn.MouseButton1Click:Connect(function()
     main.Visible = false
     mini.Visible = true
 end)
 
--- Click mini icon → restore
-mini.MouseButton1Down:Connect(function()
+-- Click mini → restore
+mini.MouseButton1Click:Connect(function()
     main.Visible = true
     mini.Visible = false
 end)
 
--- Close
+-- Close logic
 close.MouseButton1Click:Connect(function()
     gui:Destroy()
 end)
