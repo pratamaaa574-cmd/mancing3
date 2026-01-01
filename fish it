@@ -1,0 +1,144 @@
+-- BENJAMIN | DELTA SAFE UI
+
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+
+local plr = Players.LocalPlayer
+
+pcall(function()
+    plr.PlayerGui:FindFirstChild("BENJAMIN_GUI"):Destroy()
+end)
+
+-- SCREEN GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "BENJAMIN_GUI"
+gui.Parent = plr.PlayerGui
+gui.ResetOnSpawn = false
+
+-- MAIN WINDOW
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.new(0,480,0,300)
+main.Position = UDim2.new(0.5,-240,0.5,-150)
+main.BackgroundColor3 = Color3.fromRGB(20,20,20)
+main.BackgroundTransparency = 0.15
+main.BorderSizePixel = 0
+
+-- TOP BAR
+local top = Instance.new("Frame", main)
+top.Size = UDim2.new(1,0,0,36)
+top.BackgroundColor3 = Color3.fromRGB(30,30,30)
+top.BorderSizePixel = 0
+
+local title = Instance.new("TextLabel", top)
+title.Size = UDim2.new(1,-80,1,0)
+title.Position = UDim2.new(0,10,0,0)
+title.Text = "BENJAMIN"
+title.TextColor3 = Color3.new(1,1,1)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 14
+title.BackgroundTransparency = 1
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+-- CLOSE
+local close = Instance.new("TextButton", top)
+close.Size = UDim2.new(0,24,0,24)
+close.Position = UDim2.new(1,-30,0,6)
+close.Text = "X"
+close.BackgroundColor3 = Color3.fromRGB(180,60,60)
+close.TextColor3 = Color3.new(1,1,1)
+close.Font = Enum.Font.GothamBold
+close.TextSize = 14
+close.BorderSizePixel = 0
+
+-- MINIMIZE
+local miniBtn = Instance.new("TextButton", top)
+miniBtn.Size = UDim2.new(0,24,0,24)
+miniBtn.Position = UDim2.new(1,-60,0,6)
+miniBtn.Text = "-"
+miniBtn.BackgroundColor3 = Color3.fromRGB(80,80,80)
+miniBtn.TextColor3 = Color3.new(1,1,1)
+miniBtn.Font = Enum.Font.GothamBold
+miniBtn.TextSize = 18
+miniBtn.BorderSizePixel = 0
+
+-- CONTENT
+local fps = Instance.new("TextButton", main)
+fps.Size = UDim2.new(0,140,0,30)
+fps.Position = UDim2.new(0,20,0,60)
+fps.Text = "FPS BOOST"
+fps.BackgroundColor3 = Color3.fromRGB(255,105,180)
+fps.TextColor3 = Color3.new(1,1,1)
+fps.Font = Enum.Font.Gotham
+fps.TextSize = 13
+fps.BorderSizePixel = 0
+
+-- MINI ICON
+local mini = Instance.new("Frame", gui)
+mini.Size = UDim2.new(0,46,0,46)
+mini.Position = UDim2.new(0.5,-23,0.8,0)
+mini.BackgroundColor3 = Color3.fromRGB(255,105,180)
+mini.Visible = false
+mini.BorderSizePixel = 0
+
+local miniText = Instance.new("TextLabel", mini)
+miniText.Size = UDim2.new(1,0,1,0)
+miniText.Text = "B"
+miniText.TextColor3 = Color3.new(1,1,1)
+miniText.Font = Enum.Font.GothamBold
+miniText.TextSize = 18
+miniText.BackgroundTransparency = 1
+
+-- DRAG FUNCTION
+local function dragify(frame)
+    local drag, start, pos
+    frame.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then
+            drag = true
+            start = i.Position
+            pos = frame.Position
+        end
+    end)
+    UIS.InputChanged:Connect(function(i)
+        if drag and i.UserInputType == Enum.UserInputType.MouseMovement then
+            local d = i.Position - start
+            frame.Position = UDim2.new(pos.X.Scale,pos.X.Offset+d.X,pos.Y.Scale,pos.Y.Offset+d.Y)
+        end
+    end)
+    UIS.InputEnded:Connect(function()
+        drag = false
+    end)
+end
+
+dragify(main)
+dragify(mini)
+
+-- BUTTON LOGIC
+miniBtn.MouseButton1Click:Connect(function()
+    main.Visible = false
+    mini.Visible = true
+end)
+
+mini.InputBegan:Connect(function(i)
+    if i.UserInputType == Enum.UserInputType.MouseButton1 then
+        mini.Visible = false
+        main.Visible = true
+    end
+end)
+
+close.MouseButton1Click:Connect(function()
+    gui:Destroy()
+end)
+
+-- FPS BOOST REAL
+fps.MouseButton1Click:Connect(function()
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+    Lighting.GlobalShadows = false
+    Lighting.FogEnd = 9e9
+    for _,v in pairs(workspace:GetDescendants()) do
+        if v:IsA("ParticleEmitter") or v:IsA("Trail") then
+            v.Enabled = false
+        end
+    end
+    fps.Text = "FPS BOOSTED"
+end)
