@@ -1,14 +1,13 @@
--- BENJAMIN MINIMAL GUI | PERSEGI PANJANG HITAM + PINK BORDER + MINIMIZE/DRAG/CLOSE
+-- BENJAMIN GUI FINAL | DELTA READY
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
-
 local plr = Players.LocalPlayer
 
--- Hapus GUI lama
-pcall(function()
-    plr.PlayerGui:FindFirstChild("BENJAMIN_GUI"):Destroy()
-end)
+-- hapus GUI lama
+if plr.PlayerGui:FindFirstChild("BENJAMIN_GUI") then
+    plr.PlayerGui.BENJAMIN_GUI:Destroy()
+end
 
 -- SCREEN GUI
 local gui = Instance.new("ScreenGui")
@@ -16,15 +15,15 @@ gui.Name = "BENJAMIN_GUI"
 gui.Parent = plr.PlayerGui
 gui.ResetOnSpawn = false
 
--- MAIN KOTAK PERSEGI PANJANG
+-- MAIN KOTAK
 local main = Instance.new("Frame", gui)
 main.Size = UDim2.new(0,220,0,60)
 main.Position = UDim2.new(0.5,-110,0.5,-30)
-main.BackgroundColor3 = Color3.fromRGB(20,20,20) -- hitam
+main.BackgroundColor3 = Color3.fromRGB(20,20,20)
 main.BorderSizePixel = 3
-main.BorderColor3 = Color3.fromRGB(255,105,180) -- pink border
-Instance.new("UICorner", main).CornerRadius = UDim.new(0,10)
+main.BorderColor3 = Color3.fromRGB(255,105,180)
 main.Visible = true
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,10)
 
 -- TEXT BENJAMIN
 local title = Instance.new("TextLabel", main)
@@ -32,9 +31,9 @@ title.Size = UDim2.new(1,0,1,0)
 title.Text = "BENJAMIN"
 title.TextColor3 = Color3.new(1,1,1)
 title.Font = Enum.Font.GothamBold
-title.TextSize = 14
-title.BackgroundTransparency = 1
+title.TextSize = 16
 title.TextScaled = true
+title.BackgroundTransparency = 1
 title.TextXAlignment = Enum.TextXAlignment.Center
 title.TextYAlignment = Enum.TextYAlignment.Center
 
@@ -79,27 +78,31 @@ miniText.BackgroundTransparency = 1
 
 -- DRAG FUNCTION
 local function dragify(frame)
-    local drag, start, pos
-    frame.InputBegan:Connect(function(i)
-        if i.UserInputType == Enum.UserInputType.MouseButton1 then
-            drag = true
-            start = i.Position
-            pos = frame.Position
+    local dragging = false
+    local startPos, startPosFrame
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            startPos = input.Position
+            startPosFrame = frame.Position
         end
     end)
-    UIS.InputChanged:Connect(function(i)
-        if drag and i.UserInputType == Enum.UserInputType.MouseMovement then
-            local d = i.Position - start
-            frame.Position = UDim2.new(pos.X.Scale,pos.X.Offset+d.X,pos.Y.Scale,pos.Y.Offset+d.Y)
+    frame.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
         end
     end)
-    UIS.InputEnded:Connect(function()
-        drag = false
+    UIS.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - startPos
+            frame.Position = UDim2.new(startPosFrame.X.Scale, startPosFrame.X.Offset + delta.X,
+                                        startPosFrame.Y.Scale, startPosFrame.Y.Offset + delta.Y)
+        end
     end)
 end
 
 dragify(main)
-dragify(mini) -- mini icon juga bisa digeser
+dragify(mini)
 
 -- MINIMIZE LOGIC
 miniBtn.MouseButton1Click:Connect(function()
@@ -107,8 +110,8 @@ miniBtn.MouseButton1Click:Connect(function()
     mini.Visible = true
 end)
 
-mini.InputBegan:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseButton1 then
+mini.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
         mini.Visible = false
         main.Visible = true
     end
