@@ -1,4 +1,4 @@
--- BENJAMIN | DELTA SAFE UI
+-- BENJAMIN X | ICON BIRU + DRAG & MINIMIZE | DELTA SAFE
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
@@ -6,6 +6,7 @@ local Lighting = game:GetService("Lighting")
 
 local plr = Players.LocalPlayer
 
+-- HAPUS SCRIPT LAMA
 pcall(function()
     plr.PlayerGui:FindFirstChild("BENJAMIN_GUI"):Destroy()
 end)
@@ -23,6 +24,7 @@ main.Position = UDim2.new(0.5,-240,0.5,-150)
 main.BackgroundColor3 = Color3.fromRGB(20,20,20)
 main.BackgroundTransparency = 0.15
 main.BorderSizePixel = 0
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,12)
 
 -- TOP BAR
 local top = Instance.new("Frame", main)
@@ -40,7 +42,7 @@ title.TextSize = 14
 title.BackgroundTransparency = 1
 title.TextXAlignment = Enum.TextXAlignment.Left
 
--- CLOSE
+-- CLOSE BUTTON
 local close = Instance.new("TextButton", top)
 close.Size = UDim2.new(0,24,0,24)
 close.Position = UDim2.new(1,-30,0,6)
@@ -51,7 +53,7 @@ close.Font = Enum.Font.GothamBold
 close.TextSize = 14
 close.BorderSizePixel = 0
 
--- MINIMIZE
+-- MINIMIZE BUTTON
 local miniBtn = Instance.new("TextButton", top)
 miniBtn.Size = UDim2.new(0,24,0,24)
 miniBtn.Position = UDim2.new(1,-60,0,6)
@@ -62,7 +64,24 @@ miniBtn.Font = Enum.Font.GothamBold
 miniBtn.TextSize = 18
 miniBtn.BorderSizePixel = 0
 
--- CONTENT
+-- MINI ICON (BIRU)
+local mini = Instance.new("Frame", gui)
+mini.Size = UDim2.new(0,46,0,46)
+mini.Position = UDim2.new(0.5,-23,0.8,0)
+mini.BackgroundColor3 = Color3.fromRGB(0,120,255) -- biru terang
+mini.Visible = false
+mini.BorderSizePixel = 0
+Instance.new("UICorner", mini).CornerRadius = UDim.new(1,0)
+
+local miniText = Instance.new("TextLabel", mini)
+miniText.Size = UDim2.new(1,0,1,0)
+miniText.Text = "B"
+miniText.TextColor3 = Color3.new(1,1,1)
+miniText.Font = Enum.Font.GothamBold
+miniText.TextSize = 18
+miniText.BackgroundTransparency = 1
+
+-- FPS BOOST BUTTON
 local fps = Instance.new("TextButton", main)
 fps.Size = UDim2.new(0,140,0,30)
 fps.Position = UDim2.new(0,20,0,60)
@@ -72,22 +91,6 @@ fps.TextColor3 = Color3.new(1,1,1)
 fps.Font = Enum.Font.Gotham
 fps.TextSize = 13
 fps.BorderSizePixel = 0
-
--- MINI ICON
-local mini = Instance.new("Frame", gui)
-mini.Size = UDim2.new(0,46,0,46)
-mini.Position = UDim2.new(0.5,-23,0.8,0)
-mini.BackgroundColor3 = Color3.fromRGB(255,105,180)
-mini.Visible = false
-mini.BorderSizePixel = 0
-
-local miniText = Instance.new("TextLabel", mini)
-miniText.Size = UDim2.new(1,0,1,0)
-miniText.Text = "B"
-miniText.TextColor3 = Color3.new(1,1,1)
-miniText.Font = Enum.Font.GothamBold
-miniText.TextSize = 18
-miniText.BackgroundTransparency = 1
 
 -- DRAG FUNCTION
 local function dragify(frame)
@@ -113,7 +116,7 @@ end
 dragify(main)
 dragify(mini)
 
--- BUTTON LOGIC
+-- MINIMIZE LOGIC
 miniBtn.MouseButton1Click:Connect(function()
     main.Visible = false
     mini.Visible = true
@@ -126,6 +129,7 @@ mini.InputBegan:Connect(function(i)
     end
 end)
 
+-- CLOSE LOGIC
 close.MouseButton1Click:Connect(function()
     gui:Destroy()
 end)
@@ -141,4 +145,4 @@ fps.MouseButton1Click:Connect(function()
         end
     end
     fps.Text = "FPS BOOSTED"
-end)
+end)--
