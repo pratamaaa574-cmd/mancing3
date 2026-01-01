@@ -1,11 +1,11 @@
--- BENJAMIN MINIMAL GUI | DELTA SAFE
+-- BENJAMIN MINIMAL GUI | PERSEGI PANJANG HITAM + PINK BORDER + MINIMIZE/DRAG/CLOSE
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 
 local plr = Players.LocalPlayer
 
--- hapus GUI lama
+-- Hapus GUI lama
 pcall(function()
     plr.PlayerGui:FindFirstChild("BENJAMIN_GUI"):Destroy()
 end)
@@ -16,28 +16,55 @@ gui.Name = "BENJAMIN_GUI"
 gui.Parent = plr.PlayerGui
 gui.ResetOnSpawn = false
 
--- MAIN KOTAK
+-- MAIN KOTAK PERSEGI PANJANG
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0,180,0,60) -- kotak kecil
-main.Position = UDim2.new(0.5,-90,0.5,-30)
-main.BackgroundColor3 = Color3.fromRGB(255,105,180) -- warna kotak pink
-main.BorderSizePixel = 0
-Instance.new("UICorner", main).CornerRadius = UDim.new(0,12)
+main.Size = UDim2.new(0,220,0,60)
+main.Position = UDim2.new(0.5,-110,0.5,-30)
+main.BackgroundColor3 = Color3.fromRGB(20,20,20) -- hitam
+main.BorderSizePixel = 3
+main.BorderColor3 = Color3.fromRGB(255,105,180) -- pink border
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,10)
+main.Visible = true
 
--- NAMA TEXT
+-- TEXT BENJAMIN
 local title = Instance.new("TextLabel", main)
 title.Size = UDim2.new(1,0,1,0)
 title.Text = "BENJAMIN"
 title.TextColor3 = Color3.new(1,1,1)
 title.Font = Enum.Font.GothamBold
-title.TextSize = 20
+title.TextSize = 14
 title.BackgroundTransparency = 1
+title.TextScaled = true
+title.TextXAlignment = Enum.TextXAlignment.Center
+title.TextYAlignment = Enum.TextYAlignment.Center
 
--- MINIMIZE ICON BIRU
+-- CLOSE BUTTON
+local close = Instance.new("TextButton", main)
+close.Size = UDim2.new(0,24,0,24)
+close.Position = UDim2.new(1,-28,0,2)
+close.Text = "X"
+close.TextColor3 = Color3.new(1,1,1)
+close.BackgroundColor3 = Color3.fromRGB(180,60,60)
+close.BorderSizePixel = 0
+close.Font = Enum.Font.GothamBold
+close.TextSize = 14
+
+-- MINIMIZE BUTTON
+local miniBtn = Instance.new("TextButton", main)
+miniBtn.Size = UDim2.new(0,24,0,24)
+miniBtn.Position = UDim2.new(1,-58,0,2)
+miniBtn.Text = "-"
+miniBtn.TextColor3 = Color3.new(1,1,1)
+miniBtn.BackgroundColor3 = Color3.fromRGB(80,80,80)
+miniBtn.BorderSizePixel = 0
+miniBtn.Font = Enum.Font.GothamBold
+miniBtn.TextSize = 18
+
+-- MINI ICON BIRU
 local mini = Instance.new("Frame", gui)
 mini.Size = UDim2.new(0,70,0,70)
 mini.Position = UDim2.new(0.5,-35,0.8,0)
-mini.BackgroundColor3 = Color3.fromRGB(0,120,255) -- biru
+mini.BackgroundColor3 = Color3.fromRGB(0,120,255)
 mini.Visible = false
 mini.BorderSizePixel = 0
 Instance.new("UICorner", mini).CornerRadius = UDim.new(1,0)
@@ -72,14 +99,12 @@ local function dragify(frame)
 end
 
 dragify(main)
-dragify(mini)
+dragify(mini) -- mini icon juga bisa digeser
 
 -- MINIMIZE LOGIC
-main.InputBegan:Connect(function(i)
-    if i.UserInputType == Enum.UserInputType.MouseButton1 then
-        main.Visible = false
-        mini.Visible = true
-    end
+miniBtn.MouseButton1Click:Connect(function()
+    main.Visible = false
+    mini.Visible = true
 end)
 
 mini.InputBegan:Connect(function(i)
@@ -87,4 +112,9 @@ mini.InputBegan:Connect(function(i)
         mini.Visible = false
         main.Visible = true
     end
+end)
+
+-- CLOSE LOGIC
+close.MouseButton1Click:Connect(function()
+    gui:Destroy()
 end)
