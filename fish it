@@ -1,31 +1,31 @@
--- BENJAMIN GUI FINAL | DELTA READY
+-- BENJAMIN GUI FIXED FULL DRAG & MINIMIZE/ICON | LOCALSCRIPT DELTA READY
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local plr = Players.LocalPlayer
 
--- hapus GUI lama
+-- Hapus GUI lama
 if plr.PlayerGui:FindFirstChild("BENJAMIN_GUI") then
     plr.PlayerGui.BENJAMIN_GUI:Destroy()
 end
 
--- SCREEN GUI
+-- ROOT GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "BENJAMIN_GUI"
 gui.Parent = plr.PlayerGui
 gui.ResetOnSpawn = false
 
--- MAIN KOTAK
+-- MAIN FRAME
 local main = Instance.new("Frame", gui)
 main.Size = UDim2.new(0,220,0,60)
 main.Position = UDim2.new(0.5,-110,0.5,-30)
 main.BackgroundColor3 = Color3.fromRGB(20,20,20)
 main.BorderSizePixel = 3
 main.BorderColor3 = Color3.fromRGB(255,105,180)
-main.Visible = true
 Instance.new("UICorner", main).CornerRadius = UDim.new(0,10)
+main.Visible = true
 
--- TEXT BENJAMIN
+-- TEXT
 local title = Instance.new("TextLabel", main)
 title.Size = UDim2.new(1,0,1,0)
 title.Text = "BENJAMIN"
@@ -110,6 +110,7 @@ miniBtn.MouseButton1Click:Connect(function()
     mini.Visible = true
 end)
 
+-- ICON CLICK & DRAG
 mini.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         mini.Visible = false
@@ -117,7 +118,7 @@ mini.InputBegan:Connect(function(input)
     end
 end)
 
--- CLOSE LOGIC
+-- CLOSE BUTTON
 close.MouseButton1Click:Connect(function()
     gui:Destroy()
 end)
