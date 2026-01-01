@@ -1,31 +1,34 @@
--- BENJAMIN GUI FIXED FULL DRAG & MINIMIZE/ICON | LOCALSCRIPT DELTA READY
+-- BENJAMIN GUI FIX | ROBLOX DELTA READY
+-- LocalScript version
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local plr = Players.LocalPlayer
 
--- Hapus GUI lama
+-- Bersihin GUI lama
 if plr.PlayerGui:FindFirstChild("BENJAMIN_GUI") then
     plr.PlayerGui.BENJAMIN_GUI:Destroy()
 end
 
--- ROOT GUI
+-- ScreenGui
 local gui = Instance.new("ScreenGui")
 gui.Name = "BENJAMIN_GUI"
 gui.Parent = plr.PlayerGui
+gui.Enabled = true
 gui.ResetOnSpawn = false
 
--- MAIN FRAME
-local main = Instance.new("Frame", gui)
+-- Main frame
+local main = Instance.new("Frame")
 main.Size = UDim2.new(0,220,0,60)
 main.Position = UDim2.new(0.5,-110,0.5,-30)
 main.BackgroundColor3 = Color3.fromRGB(20,20,20)
 main.BorderSizePixel = 3
 main.BorderColor3 = Color3.fromRGB(255,105,180)
-Instance.new("UICorner", main).CornerRadius = UDim.new(0,10)
 main.Visible = true
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,10)
+main.Parent = gui
 
--- TEXT
+-- Title
 local title = Instance.new("TextLabel", main)
 title.Size = UDim2.new(1,0,1,0)
 title.Text = "BENJAMIN"
@@ -37,7 +40,7 @@ title.BackgroundTransparency = 1
 title.TextXAlignment = Enum.TextXAlignment.Center
 title.TextYAlignment = Enum.TextYAlignment.Center
 
--- CLOSE BUTTON
+-- Close button
 local close = Instance.new("TextButton", main)
 close.Size = UDim2.new(0,24,0,24)
 close.Position = UDim2.new(1,-28,0,2)
@@ -48,7 +51,7 @@ close.BorderSizePixel = 0
 close.Font = Enum.Font.GothamBold
 close.TextSize = 14
 
--- MINIMIZE BUTTON
+-- Minimize button
 local miniBtn = Instance.new("TextButton", main)
 miniBtn.Size = UDim2.new(0,24,0,24)
 miniBtn.Position = UDim2.new(1,-58,0,2)
@@ -59,14 +62,15 @@ miniBtn.BorderSizePixel = 0
 miniBtn.Font = Enum.Font.GothamBold
 miniBtn.TextSize = 18
 
--- MINI ICON BIRU
-local mini = Instance.new("Frame", gui)
+-- Mini icon
+local mini = Instance.new("Frame")
 mini.Size = UDim2.new(0,70,0,70)
 mini.Position = UDim2.new(0.5,-35,0.8,0)
 mini.BackgroundColor3 = Color3.fromRGB(0,120,255)
 mini.Visible = false
 mini.BorderSizePixel = 0
 Instance.new("UICorner", mini).CornerRadius = UDim.new(1,0)
+mini.Parent = gui
 
 local miniText = Instance.new("TextLabel", mini)
 miniText.Size = UDim2.new(1,0,1,0)
@@ -76,15 +80,14 @@ miniText.Font = Enum.Font.GothamBold
 miniText.TextSize = 32
 miniText.BackgroundTransparency = 1
 
--- DRAG FUNCTION
+-- Drag function (works only when clicking outside buttons)
 local function dragify(frame)
-    local dragging = false
-    local startPos, startPosFrame
+    local dragging, dragStart, startPos
     frame.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = true
-            startPos = input.Position
-            startPosFrame = frame.Position
+            dragStart = input.Position
+            startPos = frame.Position
         end
     end)
     frame.InputEnded:Connect(function(input)
@@ -94,9 +97,9 @@ local function dragify(frame)
     end)
     UIS.InputChanged:Connect(function(input)
         if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            local delta = input.Position - startPos
-            frame.Position = UDim2.new(startPosFrame.X.Scale, startPosFrame.X.Offset + delta.X,
-                                        startPosFrame.Y.Scale, startPosFrame.Y.Offset + delta.Y)
+            local delta = input.Position - dragStart
+            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+                                       startPos.Y.Scale, startPos.Y.Offset + delta.Y)
         end
     end)
 end
@@ -104,21 +107,19 @@ end
 dragify(main)
 dragify(mini)
 
--- MINIMIZE LOGIC
+-- Minimize
 miniBtn.MouseButton1Click:Connect(function()
     main.Visible = false
     mini.Visible = true
 end)
 
--- ICON CLICK & DRAG
-mini.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        mini.Visible = false
-        main.Visible = true
-    end
+-- Click mini icon → restore
+mini.MouseButton1Down:Connect(function()
+    main.Visible = true
+    mini.Visible = false
 end)
 
--- CLOSE BUTTON
+-- Close
 close.MouseButton1Click:Connect(function()
     gui:Destroy()
 end)
